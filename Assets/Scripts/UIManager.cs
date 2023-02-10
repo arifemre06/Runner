@@ -5,6 +5,7 @@ namespace DefaultNamespace
 {   
     public class UIManager : MonoBehaviour
     {
+        [SerializeField] private GameObject gameStartPanel;
         [SerializeField] private GameObject gameOverPanel;
         [SerializeField] private GameObject gameStartText;
 
@@ -20,8 +21,14 @@ namespace DefaultNamespace
 
         private void OnGameStateChanged(GameState oldState, GameState newState)
         {
-            if (newState == GameState.Menu)
+            if (newState == GameState.GameStartMenu)
             {
+                ActivateGameStartPanel(true);
+                ActivateStartText(false);
+            }
+            else if (newState == GameState.TapToStartMenu)
+            {   
+                ActivateGameStartPanel(false);
                 ActivateStartText(true);
                 ActivateGameOverPanel(false);
             }
@@ -37,6 +44,10 @@ namespace DefaultNamespace
         }
 
 
+        private void ActivateGameStartPanel(bool isActive)
+        {
+            gameStartPanel.SetActive(isActive);
+        }
         private void ActivateStartText(bool isActive)
         {
             gameStartText.SetActive(isActive);

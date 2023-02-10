@@ -1,19 +1,25 @@
+using DefaultNamespace;
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private Transform _targetTransform;
     [SerializeField] private float range;
     [SerializeField] private float fightRange;
     [SerializeField] private float enemySpeed;
     [SerializeField] private float power;
+    [SerializeField] private PlayerModelSwitchController _playerModelSwitchController;
+    [SerializeField] private TextMeshPro enemyPointText;
+    private Transform _targetTransform;
     private bool _isMovingToPlayer = false;
     private bool notFightYet;
 
     
     private void Start()
     {
-        
+        _playerModelSwitchController.UpdateModel(power);
+        enemyPointText.text = power.ToString();
+
     }
 
     private void Update()
@@ -40,6 +46,7 @@ public class Enemy : MonoBehaviour
     public void SetPower(float newPower)
     {
         power = newPower;
+        enemyPointText.text = newPower.ToString();
     }
 
     public void Die()

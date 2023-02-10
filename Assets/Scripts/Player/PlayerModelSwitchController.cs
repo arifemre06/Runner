@@ -5,21 +5,23 @@ namespace DefaultNamespace
 {
     public class PlayerModelSwitchController : MonoBehaviour
     {
-        [SerializeField] private MeshRenderer[] models;
-        private int modelCurrentIndex = 0;
+        //[SerializeField] private Renderer[] models;
+        [SerializeField] private GameObject[] models;
+        private int currentModelIndex = 0;
+       
 
         private void Awake()
         {
             foreach (var model in models)
             {
-                model.gameObject.SetActive(false);
+                model.SetActive(false);
             }
             
         }
-
+        
         public void UpdateModel(float playerPoint)
         {
-            if (playerPoint <= 5 && playerPoint != 0)
+            if (playerPoint <= 5)
             {
                 ChangeModel(0);
             }
@@ -32,13 +34,14 @@ namespace DefaultNamespace
                 ChangeModel(2);
             }
         }
-        
-        
+
 
         private void ChangeModel(int modelIndex)
         {
-            models[modelCurrentIndex].gameObject.SetActive(false);
-            models[modelIndex].gameObject.SetActive(true);
+           
+            models[currentModelIndex].SetActive(false);
+            models[modelIndex].SetActive(true);
+            currentModelIndex = modelIndex;
         }
     }
 }

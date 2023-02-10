@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace DefaultNamespace
@@ -11,13 +14,22 @@ namespace DefaultNamespace
         [SerializeField] private PlayerFightController playerFightController;
         [SerializeField] private PlayerCollisionDetector playerCollisionDetector;
         [SerializeField] private PlayerModelSwitchController playerModelSwitchController;
+        [SerializeField] private PlayerAnimController PlayerAnimController;
         [SerializeField] private float playerPoint;
+        [SerializeField] private TextMeshPro playerPointText;
+
         
 
         public float PlayerPoint
         {
             get => playerPoint;
-            set => playerPoint = value;
+            set
+            {
+                playerPoint = value;
+                playerPointText.text = value.ToString();
+                
+            }
+            
         }
 
         private void Awake()
@@ -30,7 +42,8 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            playerModelSwitchController.UpdateModel(playerPoint);
+            playerModelSwitchController.UpdateModel(PlayerPoint);
+            playerPointText.text = PlayerPoint.ToString();
         }
 
         private void Die()
@@ -54,24 +67,26 @@ namespace DefaultNamespace
 
         private void OnGateHitExit(GateController gate)
         {
+           
             if (gate.GetEffectType() == GateController.EffectType.Multiplication)
             {
-                playerPoint *= gate.GetEffect();
+                PlayerPoint *= gate.GetEffect();
             }
             else
             {
-                playerPoint  += gate.GetEffect();
+                PlayerPoint  += gate.GetEffect();
             }
-            playerModelSwitchController.UpdateModel(playerPoint);
+            playerModelSwitchController.UpdateModel(PlayerPoint);
             
 
-            Debug.Log("puan " + playerPoint );
+            Debug.Log("puan " + PlayerPoint );
             
         }
 
         private void OnEnemyDetected(Enemy[] enemies)
         {
             playerMovementController.SetIsInputAvailable(false);
+            
             foreach (var enemy in enemies)
             {
                 enemy.SetIsMovingToPlayer(true,transform);
@@ -83,6 +98,11 @@ namespace DefaultNamespace
             playerMovementController.StartMoving();
             
             playerCollisionDetector.SetCollisionDetectionActive(true);
+        }
+
+        public Transform GetPlayerTransform()
+        {
+            return gameObject.transform;
         }
 
     }

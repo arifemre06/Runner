@@ -16,4 +16,9 @@ public class CameraController : MonoBehaviour
         Vector3 newPosition = new Vector3(pos.x, pos.y, offset.z + target.position.z);
         transform.position = Vector3.Lerp(transform.position, newPosition, 0.2f);
     }
+
+    public void SetTarget(Transform targetTransform)
+    {
+        target = targetTransform;
+    }
 }
