@@ -7,6 +7,7 @@ namespace DefaultNamespace
         public static event Action<GameState, GameState> GameStateChanged;
         public static event Action GameFailed;
         public static event Action GameStartButtonClicked;
+        public static event Action ArrivedToFinish;
 
         public static void RaiseOnGameStateChanged(GameState oldState, GameState newState)
         {
@@ -21,6 +22,11 @@ namespace DefaultNamespace
         public static void RaiseGameStartButtonClicked()
         {
             GameStartButtonClicked?.Invoke();
+        }
+
+        public static void RaiseArrivedToFinish()
+        {
+            ArrivedToFinish?.Invoke();
         }
     }
 }

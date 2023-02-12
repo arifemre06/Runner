@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 public class GameManager : MonoBehaviour
 {
     private PlayerManager playerManager;
-    [SerializeField] private LevelManager LevelManager;
+    [SerializeField] private LevelManager levelManager;
     [SerializeField] private CameraController camera;
     private GameState _gameState;
     
@@ -15,13 +15,21 @@ public class GameManager : MonoBehaviour
     {
         EventManager.GameFailed += OnGameFailed;
         EventManager.GameStartButtonClicked += GoMenuToGamePlay;
+        EventManager.ArrivedToFinish += FinishCompletedLevel;
         _gameState = GameState.None;
     }
-    
+
+    private void FinishCompletedLevel()
+    {
+        levelManager.SetLevelIndexToNextLevel();
+        CreateLevel();
+    }
+
     private void CreateLevel()
     {
-        LevelManager.PrepareCurrentLevel();
-        playerManager = LevelManager.GetPlayerManager();
+        levelManager.PrepareCurrentLevel();
+        playerManager = levelManager.GetPlayerManager();
+        Debug.Log("buraya gelmıyoz mu simdi");
         camera.SetTarget(playerManager.GetPlayerTransform());
     }
 
@@ -29,6 +37,7 @@ public class GameManager : MonoBehaviour
     {
         EventManager.GameFailed -= OnGameFailed;
         EventManager.GameStartButtonClicked -= GoMenuToGamePlay;
+        EventManager.ArrivedToFinish -= FinishCompletedLevel;
     }
 
     private void OnGameFailed()

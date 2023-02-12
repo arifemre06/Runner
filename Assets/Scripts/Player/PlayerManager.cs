@@ -17,8 +17,8 @@ namespace DefaultNamespace
         [SerializeField] private PlayerAnimController PlayerAnimController;
         [SerializeField] private float playerPoint;
         [SerializeField] private TextMeshPro playerPointText;
-
         
+
 
         public float PlayerPoint
         {
@@ -39,6 +39,8 @@ namespace DefaultNamespace
             playerFightController.fightResulted += OnFightResulted;
             playerCollisionDetector.gateHitExit += OnGateHitExit;
         }
+
+        
 
         private void Start()
         {

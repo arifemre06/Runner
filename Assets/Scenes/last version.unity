@@ -2380,6 +2380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPrefabs:
   - {fileID: -2948810229859375977, guid: d80c6fa7a2917384682ca31fb15496d1, type: 3}
+  - {fileID: -2948810229859375977, guid: 04073266484c6514f98fffd7cfc1b93b, type: 3}
 --- !u!1001 &3187044269519061837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2498,6 +2499,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6108334530364186282, guid: 4df4ef57c2d184589ba1b7a5bf77c396, type: 3}
       propertyPath: LevelManager
+      value: 
+      objectReference: {fileID: 2050225609}
+    - target: {fileID: 6108334530364186282, guid: 4df4ef57c2d184589ba1b7a5bf77c396, type: 3}
+      propertyPath: levelManager
       value: 
       objectReference: {fileID: 2050225609}
     - target: {fileID: 6108334530364186282, guid: 4df4ef57c2d184589ba1b7a5bf77c396, type: 3}

@@ -37,5 +37,12 @@ namespace DefaultNamespace
         {
             return currentLevel.GetPlayerManager();
         }
+
+        public void SetLevelIndexToNextLevel()
+        {   
+                Debug.Log($"currentLevelIndex {currentLevelIndex}");
+            currentLevelIndex += 1;
+            
+        }
     }
 }

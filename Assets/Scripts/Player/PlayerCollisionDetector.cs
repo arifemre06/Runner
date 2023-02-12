@@ -13,6 +13,7 @@ namespace DefaultNamespace
         public event Action<Enemy[]> enemyDetected;
         public event Action<Enemy[]> enemyInFightRange;
         public event Action<GateController> gateHitExit;
+        
         private bool _isActive;
         private Collider[] _hits;
 
@@ -74,7 +75,11 @@ namespace DefaultNamespace
                 GateController gate = other.GetComponent<GateController>();
                 
                 gateHitExit?.Invoke(gate);
-                
+            }
+            else if (other.transform.CompareTag(Tags.FinishTriggerObject))
+            {
+                Debug.Log("level finished");
+                EventManager.RaiseArrivedToFinish();
             }
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
