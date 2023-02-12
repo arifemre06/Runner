@@ -13,7 +13,7 @@ namespace DefaultNamespace
         public event Action<Enemy[]> enemyDetected;
         public event Action<Enemy[]> enemyInFightRange;
         public event Action<GateController> gateHitExit;
-        
+        public event Action<GameObject> ObstacleHit;
         private bool _isActive;
         private Collider[] _hits;
 
@@ -84,9 +84,15 @@ namespace DefaultNamespace
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (hit.transform.CompareTag(Tags.Obstacle))
+            if (!_isActive)
             {
-                EventManager.RaiseOnGameFailed();
+                return;
+            }
+
+            if (hit.transform.CompareTag(Tags.Obstacle))
+            {   
+                ObstacleHit?.Invoke(hit.gameObject);
+                
             }
         }
     }

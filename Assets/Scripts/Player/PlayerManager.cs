@@ -38,9 +38,14 @@ namespace DefaultNamespace
             playerCollisionDetector.enemyInFightRange += playerFightController.OnEnemyInFightsRange;
             playerFightController.fightResulted += OnFightResulted;
             playerCollisionDetector.gateHitExit += OnGateHitExit;
+            playerCollisionDetector.ObstacleHit += OnObstacleHit;
         }
 
-        
+        private void OnObstacleHit(GameObject obj)
+        {
+            Die();
+        }
+
 
         private void Start()
         {
@@ -49,8 +54,9 @@ namespace DefaultNamespace
         }
 
         private void Die()
-        {   
-            gameObject.SetActive(false);
+        {
+            playerCollisionDetector.SetCollisionDetectionActive(false);
+            playerMovementController.SetIsInputAvailable(false);
             EventManager.RaiseOnGameFailed();
         }
 
