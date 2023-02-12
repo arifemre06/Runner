@@ -14,13 +14,67 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         EventManager.GameFailed += OnGameFailed;
-        EventManager.GameStartButtonClicked += GoMenuToGamePlay;
-        EventManager.ArrivedToFinish += FinishCompletedLevel;
+        EventManager.StartButtonClicked += GoMenuToStartButtonClicked;
+        EventManager.ArrivedToFinish += OnArrivedToFinish;
+        EventManager.RetryLevel += OnRetry;
+        EventManager.TapToStart += OnTapToStart;
+        EventManager.NextLevel += OnNextLevel;
+        EventManager.Quit += OnQuit;
+        EventManager.MainMenuButtonClicked += OnMainMenuButtonClicked;
+      
         _gameState = GameState.None;
     }
 
-    private void FinishCompletedLevel()
+    private void OnDestroy()
     {
+        EventManager.GameFailed -= OnGameFailed;
+        EventManager.StartButtonClicked -= GoMenuToStartButtonClicked;
+        EventManager.ArrivedToFinish -= IncreaseLevelIndexAndCreateNextLevel;
+        EventManager.RetryLevel -= OnRetry;
+        EventManager.TapToStart -= OnTapToStart;
+        EventManager.NextLevel -= OnNextLevel;
+        EventManager.Quit -= OnQuit;
+        EventManager.MainMenuButtonClicked -= OnMainMenuButtonClicked;
+    }
+
+    private void OnArrivedToFinish()
+    {
+        ChangeGameState(GameState.GameWon);
+    }
+
+    private void OnMainMenuButtonClicked()
+    {   
+        
+        CreateLevel();
+        ChangeGameState(GameState.GameStartMenu);
+        Time.timeScale = 1;
+    }
+
+    private void OnQuit()
+    {
+        Application.Quit();
+    }
+
+    private void OnNextLevel()
+    {
+        IncreaseLevelIndexAndCreateNextLevel();
+        ChangeGameState(GameState.TapToStartMenu);
+    }
+
+    private void OnTapToStart()
+    {
+        StartGamePlay();
+    }
+
+    private void OnRetry()
+    {
+        CreateLevel();
+        ChangeGameState(GameState.TapToStartMenu);
+    }
+
+    private void IncreaseLevelIndexAndCreateNextLevel()
+    {
+        Debug.Log("buraya gelıyoz dımı emınız");
         levelManager.SetLevelIndexToNextLevel();
         CreateLevel();
     }
@@ -29,29 +83,18 @@ public class GameManager : MonoBehaviour
     {
         levelManager.PrepareCurrentLevel();
         playerManager = levelManager.GetPlayerManager();
-        Debug.Log("buraya gelmıyoz mu simdi");
-        camera.SetTarget(playerManager.GetPlayerTransform());
-    }
-
-    private void OnDestroy()
-    {
-        EventManager.GameFailed -= OnGameFailed;
-        EventManager.GameStartButtonClicked -= GoMenuToGamePlay;
-        EventManager.ArrivedToFinish -= FinishCompletedLevel;
+        camera.SetTarget(playerManager.transform);
     }
 
     private void OnGameFailed()
     {
         Time.timeScale = 0;
-        ChangeGameState(GameState.Finish);
+        ChangeGameState(GameState.GameFailed);
     }
     
     private void Start()
     {   
-        CreateLevel();
-        
-        ChangeGameState(GameState.GameStartMenu);
-        Time.timeScale = 1;
+        OnMainMenuButtonClicked();
     }
 
     private void ChangeGameState(GameState newState)
@@ -62,24 +105,13 @@ public class GameManager : MonoBehaviour
         EventManager.RaiseOnGameStateChanged(oldState, newState);
     }
     
-    
-    private void Update()
-    {   
-        
-        
-        if (_gameState == GameState.TapToStartMenu && SwipeManager.tap)
-        {
-            StartGamePlay();
-        }
-    }
-
     private void StartGamePlay()
     {
         ChangeGameState(GameState.Gameplay);
         playerManager.StartGame();
     }
 
-    public void GoMenuToGamePlay()
+    public void GoMenuToStartButtonClicked()
     {
         ChangeGameState(GameState.TapToStartMenu);
     }
@@ -91,5 +123,7 @@ public enum GameState
     GameStartMenu,
     TapToStartMenu,
     Gameplay,
-    Finish,
+    GameFailed,
+    GameWon,
+    
 }

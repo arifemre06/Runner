@@ -1,17 +1,21 @@
 using System;
+using DefaultNamespace.UI;
 using UnityEngine;
 
 namespace DefaultNamespace
 {   
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] private GameObject gameStartPanel;
-        [SerializeField] private GameObject gameOverPanel;
-        [SerializeField] private GameObject gameStartText;
-
+        [SerializeField] private UIPanel gameStartPanel;
+        [SerializeField] private UIPanel  gameOverPanel;
+        [SerializeField] private UIPanel  tapToStartPanel;
+        [SerializeField] private UIPanel  gameWonPanel;
+        
         private void Awake()
         {
             EventManager.GameStateChanged += OnGameStateChanged;
+            DeActivateAllPanels();
+            
         }
 
         private void OnDestroy()
@@ -21,41 +25,60 @@ namespace DefaultNamespace
 
         private void OnGameStateChanged(GameState oldState, GameState newState)
         {
+            DeActivateAllPanels();
             if (newState == GameState.GameStartMenu)
-            {
-                ActivateGameStartPanel(true);
-                ActivateStartText(false);
+            {   
+                
+                ActivateGameStartPanel();
             }
             else if (newState == GameState.TapToStartMenu)
             {   
-                ActivateGameStartPanel(false);
-                ActivateStartText(true);
-                ActivateGameOverPanel(false);
+               
+                ActivateTapToStartPanel();
+                
             }
             else if (newState == GameState.Gameplay)
             {
-                ActivateStartText(false);
-                ActivateGameOverPanel(false);
+                
             }
-            else if (newState == GameState.Finish)
-            {
-                ActivateGameOverPanel(true);
+            else if (newState == GameState.GameFailed)
+            {   
+                
+                ActivateGameOverPanel();
+            }
+            else if (newState == GameState.GameWon)
+            {   
+                
+                ActivateGameWonPanel();
             }
         }
 
-
-        private void ActivateGameStartPanel(bool isActive)
+        private void DeActivateAllPanels()
         {
-            gameStartPanel.SetActive(isActive);
-        }
-        private void ActivateStartText(bool isActive)
-        {
-            gameStartText.SetActive(isActive);
+            tapToStartPanel.DeActivatePanel();
+            gameStartPanel.DeActivatePanel();
+            gameOverPanel.DeActivatePanel();
+            gameWonPanel.DeActivatePanel();
         }
 
-        private void ActivateGameOverPanel(bool isActive)
+
+        private void ActivateGameStartPanel()
         {
-            gameOverPanel.SetActive(isActive);
+            gameStartPanel.ActivatePanel();
+        }
+        private void ActivateTapToStartPanel()
+        {
+            tapToStartPanel.ActivatePanel();
+        }
+
+        private void ActivateGameOverPanel()
+        {
+            gameOverPanel.ActivatePanel();
+        }
+
+        private void ActivateGameWonPanel()
+        {
+            gameWonPanel.ActivatePanel();
         }
     }
 }

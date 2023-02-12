@@ -121,7 +121,6 @@ public class PlayerMovementController : MonoBehaviour
         if (isAvailable)
         {
             currentForwardSpeed = forwardSpeed;
-            Debug.Log(currentForwardSpeed + " " + forwardSpeed);
             isInputAvailable = true;
         }
         else

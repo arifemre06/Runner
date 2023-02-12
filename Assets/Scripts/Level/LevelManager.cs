@@ -22,14 +22,16 @@ namespace DefaultNamespace
         }
 
         private void CreateLevel(int levelIndex)
-        {
+        {   
+            Debug.Log($"levelIndex {levelIndex}");
+            
             currentLevel = Instantiate(levelPrefabs[levelIndex], Vector3.zero ,Quaternion.identity);
             LevelCreated?.Invoke();
         }
 
         private void DestroyLevel()
         {
-            Destroy(currentLevel);
+            Destroy(currentLevel.gameObject);
             LevelDestroyed?.Invoke();
         }
 
@@ -40,7 +42,7 @@ namespace DefaultNamespace
 
         public void SetLevelIndexToNextLevel()
         {   
-                Debug.Log($"currentLevelIndex {currentLevelIndex}");
+            Debug.Log($"currentLevelIndex {currentLevelIndex}");
             currentLevelIndex += 1;
             
         }

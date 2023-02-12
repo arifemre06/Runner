@@ -84,7 +84,7 @@ namespace DefaultNamespace
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (hit.transform.CompareTag((Tags.Obstacle)))
+            if (hit.transform.CompareTag(Tags.Obstacle))
             {
                 EventManager.RaiseOnGameFailed();
             }

@@ -80,8 +80,6 @@ namespace DefaultNamespace
             }
             playerModelSwitchController.UpdateModel(PlayerPoint);
             
-
-            Debug.Log("puan " + PlayerPoint );
             
         }
 
@@ -102,10 +100,7 @@ namespace DefaultNamespace
             playerCollisionDetector.SetCollisionDetectionActive(true);
         }
 
-        public Transform GetPlayerTransform()
-        {
-            return gameObject.transform;
-        }
+       
 
     }
 }
