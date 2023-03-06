@@ -29,7 +29,7 @@ namespace DefaultNamespace
             {
                 ChangeModel(1);
             }
-            else if (playerPoint > 10 && playerPoint < 15)
+            else if (playerPoint > 10 && playerPoint <= 15)
             {
                 ChangeModel(2);
             }

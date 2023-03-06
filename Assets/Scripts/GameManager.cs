@@ -87,8 +87,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void OnGameFailed()
-    {   
-        
+    {
         Time.timeScale = 0;
         ChangeGameState(GameState.GameFailed);
     }
@@ -108,6 +107,7 @@ public class GameManager : MonoBehaviour
     
     private void StartGamePlay()
     {
+        Time.timeScale = 1;
         ChangeGameState(GameState.Gameplay);
         playerManager.StartGame();
     }

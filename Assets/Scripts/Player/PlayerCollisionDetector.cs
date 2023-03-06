@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -9,6 +10,9 @@ namespace DefaultNamespace
         [SerializeField] private LayerMask enemyLayer;
         [SerializeField] private float enemyDetectionRange;
         [SerializeField] private float enemyFightRange;
+        private bool _isEnemyInDetectionRange;
+        private bool _isEnemyInFightRange;
+        
         
         public event Action<Enemy[]> enemyDetected;
         public event Action<Enemy[]> enemyInFightRange;
@@ -32,30 +36,37 @@ namespace DefaultNamespace
             if (!_isActive)
                 return;
             
-            CheckDetectionRange();
-            CheckFightRange();
+                CheckDetectionRange();
+                CheckFightRange();
         }
 
         private void CheckDetectionRange()
         {
             var hitCount = Physics.OverlapSphereNonAlloc(transform.position, enemyDetectionRange, _hits, enemyLayer);
-            if (hitCount > 0)
-            {
+            if (hitCount > 0 && !_isEnemyInDetectionRange)
+            {   
+                
                 var hitEnemies = new Enemy[hitCount];
                 for (int i = 0; i < hitCount; i++)
                 {
                     var enemy = _hits[i].GetComponent<Enemy>();
                     hitEnemies[i] = enemy;
                 }
-
+                
+                _isEnemyInDetectionRange = true;
+                Debug.Log("noluyo");
                 enemyDetected?.Invoke(hitEnemies);
+            }
+            else if(hitCount == 0)
+            {
+                _isEnemyInDetectionRange = false;
             }
         }
 
         private void CheckFightRange()
         {
             var hitCount = Physics.OverlapSphereNonAlloc(transform.position, enemyFightRange, _hits, enemyLayer);
-            if (hitCount > 0)
+            if (hitCount > 0 && !_isEnemyInFightRange)
             {
                 var hitEnemies = new Enemy[hitCount];
                 for (int i = 0; i < hitCount; i++)
@@ -64,7 +75,12 @@ namespace DefaultNamespace
                     hitEnemies[i] = enemy;
                 }
 
+                _isEnemyInFightRange = true;
                 enemyInFightRange?.Invoke(hitEnemies);
+            }
+            else if(hitCount == 0)
+            {
+                _isEnemyInFightRange = false;
             }
         }
         

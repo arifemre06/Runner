@@ -62,7 +62,8 @@ public class PlayerMovementController : MonoBehaviour
             }
             else
             {
-                direction.y += gravity * Time.deltaTime;
+                direction.y =direction.y + (gravity * Time.deltaTime);
+                
             }
 
             if (SwipeManager.swipeRight)

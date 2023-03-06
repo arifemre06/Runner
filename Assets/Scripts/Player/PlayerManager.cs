@@ -14,7 +14,7 @@ namespace DefaultNamespace
         [SerializeField] private PlayerFightController playerFightController;
         [SerializeField] private PlayerCollisionDetector playerCollisionDetector;
         [SerializeField] private PlayerModelSwitchController playerModelSwitchController;
-        [SerializeField] private PlayerAnimController PlayerAnimController;
+        [SerializeField] private PlayerAnimController playerAnimController;
         [SerializeField] private float playerPoint;
         [SerializeField] private TextMeshPro playerPointText;
         
@@ -35,10 +35,18 @@ namespace DefaultNamespace
         private void Awake()
         {
             playerCollisionDetector.enemyDetected += OnEnemyDetected;
+            playerCollisionDetector.enemyInFightRange += OnEnemyInFightRange;
             playerCollisionDetector.enemyInFightRange += playerFightController.OnEnemyInFightsRange;
             playerFightController.fightResulted += OnFightResulted;
             playerCollisionDetector.gateHitExit += OnGateHitExit;
             playerCollisionDetector.ObstacleHit += OnObstacleHit;
+            
+        }
+
+        private void OnEnemyInFightRange(Enemy[] obj)
+        {
+            playerAnimController.PlayFightAnimation();
+            Debug.Log("buraya ne zaman gırıyoz");
         }
 
         private void OnObstacleHit(GameObject obj)
@@ -50,6 +58,9 @@ namespace DefaultNamespace
         private void Start()
         {
             playerModelSwitchController.UpdateModel(PlayerPoint);
+            
+            playerAnimController.UpdateAnimator(playerPoint);
+            
             playerPointText.text = PlayerPoint.ToString();
         }
 
@@ -57,15 +68,24 @@ namespace DefaultNamespace
         {
             playerCollisionDetector.SetCollisionDetectionActive(false);
             playerMovementController.SetIsInputAvailable(false);
+            
+            playerAnimController.PlayDieAnimation();
             EventManager.RaiseOnGameFailed();
         }
 
         private void OnFightResulted(bool fightResult)
         {
             if (fightResult)
-            {
+            {   
+                playerModelSwitchController.UpdateModel(PlayerPoint);
+                
+                playerAnimController.UpdateAnimator(PlayerPoint);
+                
                 playerMovementController.StartMoving();
                 playerMovementController.SetIsInputAvailable(true);
+                Debug.Log("fight kazanıldı");
+                playerAnimController.PlayRunningAnimation();
+                
             }
             else
             {
@@ -75,7 +95,6 @@ namespace DefaultNamespace
 
         private void OnGateHitExit(GateController gate)
         {
-           
             if (gate.GetEffectType() == GateController.EffectType.Multiplication)
             {
                 PlayerPoint *= gate.GetEffect();
@@ -85,13 +104,15 @@ namespace DefaultNamespace
                 PlayerPoint  += gate.GetEffect();
             }
             playerModelSwitchController.UpdateModel(PlayerPoint);
-            
+            playerAnimController.UpdateAnimator(playerPoint);
             
         }
 
         private void OnEnemyDetected(Enemy[] enemies)
         {
             playerMovementController.SetIsInputAvailable(false);
+            
+            playerAnimController.PlayIdleAnimation();
             
             foreach (var enemy in enemies)
             {
@@ -102,6 +123,8 @@ namespace DefaultNamespace
         public void StartGame()
         {
             playerMovementController.StartMoving();
+            
+            playerAnimController.PlayRunningAnimation();
             
             playerCollisionDetector.SetCollisionDetectionActive(true);
         }
